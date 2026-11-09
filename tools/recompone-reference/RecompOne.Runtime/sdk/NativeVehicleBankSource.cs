@@ -147,7 +147,7 @@ sealed class NativeVehicleBankSource(
         {
             long formStart = stream.Position;
             ReadExact(stream, header, "top-level IFF chunk");
-            if (!header[..4].SequenceEqual("FORM"u8))
+            if (!header.AsSpan(0, 4).SequenceEqual("FORM"u8))
                 throw new InvalidDataException(
                     $"CUSTOM.EXP contains a non-FORM chunk at 0x{formStart:X}");
             uint formSize = BinaryPrimitives.ReadUInt32BigEndian(header[4..]);
@@ -157,7 +157,7 @@ sealed class NativeVehicleBankSource(
                 throw new InvalidDataException("XOBF form is truncated");
 
             ReadExact(stream, formType, "XOBF form type");
-            if (!formType.SequenceEqual("XOBF"u8))
+            if (!formType.AsSpan().SequenceEqual("XOBF"u8))
                 throw new InvalidDataException(
                     $"CUSTOM.EXP FORM at 0x{formStart:X} is not XOBF");
 
@@ -176,7 +176,7 @@ sealed class NativeVehicleBankSource(
                     stream.Position + childSize > formEnd)
                     throw new InvalidDataException("XOBF child is truncated");
                 long payloadOffset = stream.Position;
-                if (childHeader[..4].SequenceEqual("BIN "u8))
+                if (childHeader.AsSpan(0, 4).SequenceEqual("BIN "u8))
                 {
                     if (binOffset >= 0)
                         throw new InvalidDataException(
@@ -184,7 +184,7 @@ sealed class NativeVehicleBankSource(
                     binOffset = payloadOffset;
                     binLength = (int)childSize;
                 }
-                else if (childHeader[..4].SequenceEqual("ANM "u8))
+                else if (childHeader.AsSpan(0, 4).SequenceEqual("ANM "u8))
                 {
                     if (animationOffset >= 0)
                         throw new InvalidDataException(
@@ -192,7 +192,7 @@ sealed class NativeVehicleBankSource(
                     animationOffset = payloadOffset;
                     animationLength = (int)childSize;
                 }
-                else if (childHeader[..4].SequenceEqual("SND "u8))
+                else if (childHeader.AsSpan(0, 4).SequenceEqual("SND "u8))
                 {
                     if (soundOffset >= 0)
                         throw new InvalidDataException(

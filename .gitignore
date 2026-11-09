@@ -2,6 +2,7 @@
 build/
 build-*/
 out/
+release/
 
 # Generated data (extracted CD files)
 data/
@@ -47,6 +48,8 @@ ghidra/
 /.sentry-native/
 /.tmp/
 /PS1 game/
+/Vigilante 8 - 2nd Offensive \[U\] \[SLUS-00868\]/
+/*SLUS-00868*/
 /input/
 /reference/assets/
 /reference/generated/
